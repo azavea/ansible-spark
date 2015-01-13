@@ -13,4 +13,4 @@ galaxy_info:
   categories:
   - system
 dependencies:
-  - { role: "azavea.java", java_version: "7u71-2.5.3-0ubuntu0.14.04.1" }
+  - { role: "azavea.java" }
