@@ -12,3 +12,7 @@
 
 - name: Install Spark
   apt: pkg=spark-core={{ spark_version }} state=present
+
+- name: Configure Spark environment
+  template: src=spark-env.sh.j2
+            dest=/etc/spark/conf/spark-env.sh
