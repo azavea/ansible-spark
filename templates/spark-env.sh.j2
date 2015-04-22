@@ -75,8 +75,11 @@ fi
 
 export HADOOP_CONF_DIR=${HADOOP_CONF_DIR:-/etc/hadoop/conf}
 
+{% for key, value in spark_env_extras.items() %}
+export {{ key }}="{{ value }}"
+{% endfor %}
+
 ### Comment above 2 lines and uncomment the following if
 ### you want to run with scala version, that is included with the package
 #export SCALA_HOME=${SCALA_HOME:-/usr/lib/spark/scala}
 #export PATH=$PATH:$SCALA_HOME/bin
-
