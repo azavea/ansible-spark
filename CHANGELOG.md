@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Add ability to set arbitrary environment variables in `spark-env.sh`
+
 ## 0.1.2
 
 - Fix Hadoop configuration file reference in `spark-env.sh`.
