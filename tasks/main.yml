@@ -4,7 +4,7 @@
            state=present
 
 - name: Configure the Cloudera APT repositories
-  apt_repository: repo="deb [arch=amd64] http://archive.cloudera.com/cdh5/ubuntu/{{ ansible_distribution_release }}/amd64/cdh {{ ansible_distribution_release }}-cdh5 contrib"
+  apt_repository: repo="deb [arch=amd64] http://archive.cloudera.com/cdh5/ubuntu/{{ ansible_distribution_release }}/amd64/cdh {{ ansible_distribution_release }}-{{ spark_cloudera_distribution }} contrib"
                   state=present
 
 - name: Pin Cloudera APT repositories

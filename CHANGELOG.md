@@ -1,3 +1,13 @@
+## 0.3.0
+
+- Bump Spark version to `1.3.0`.
+- Add `spark_cloudera_distribution` variable to determine which package
+  distribution channel is used.
+
+## 0.2.0
+
+- Add ability to set arbitrary environment variables in `spark-env.sh`
+
 ## 0.1.2
 
 - Fix Hadoop configuration file reference in `spark-env.sh`.
