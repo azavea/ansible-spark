@@ -1,3 +1,8 @@
+## 1.0.0
+
+- Use Apache as the source for Spark vs. Cloudera. This change breaks backward
+  compatibility with roles < 1.0.0.
+
 ## 0.3.0
 
 - Bump Spark version to `1.3.0`.
