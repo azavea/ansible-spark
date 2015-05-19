@@ -15,7 +15,7 @@
 # - SPARK_PUBLIC_DNS, to set the public DNS name of the driver program
 # - SPARK_CLASSPATH, default classpath entries to append
 # - SPARK_LOCAL_DIRS, storage directories to use on this node for shuffle and RDD data
-# - MESOS_NATIVE_LIBRARY, to point to your libmesos.so if you use Mesos
+# - MESOS_NATIVE_JAVA_LIBRARY, to point to your libmesos.so if you use Mesos
 
 # Options read in YARN client mode
 # - HADOOP_CONF_DIR, to point Spark towards Hadoop configuration files
@@ -49,37 +49,13 @@
 # - SPARK_IDENT_STRING  A string representing this instance of spark. (Default: $USER)
 # - SPARK_NICENESS      The scheduling priority for daemons. (Default: 0)
 
-###
-### === IMPORTANT ===
-### Change the following to specify a real cluster's Master host
-###
-export STANDALONE_SPARK_MASTER_HOST=`hostname`
-
-export SPARK_MASTER_IP=$STANDALONE_SPARK_MASTER_HOST
-
-### Let's run everything with JVM runtime, instead of Scala
-export SPARK_LAUNCH_WITH_SCALA=0
-export SPARK_LIBRARY_PATH=${SPARK_HOME}/lib
-export SCALA_LIBRARY_PATH=${SPARK_HOME}/lib
-export SPARK_MASTER_WEBUI_PORT=18080
-export SPARK_MASTER_PORT=7077
-export SPARK_WORKER_PORT=7078
-export SPARK_WORKER_WEBUI_PORT=18081
-export SPARK_WORKER_DIR=/var/run/spark/work
-export SPARK_LOG_DIR=/var/log/spark
-export SPARK_PID_DIR='/var/run/spark/'
-
-if [ -n "$HADOOP_HOME" ]; then
-  export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libfakeroot:/usr/lib64/libfakeroot:/usr/lib32/libfakeroot:/lib/native
-fi
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/hadoop/lib/native
 
 export HADOOP_CONF_DIR=${HADOOP_CONF_DIR:-/etc/hadoop/conf}
+
+export SPARK_LOG_DIR=${SPARK_LOG_DIR:-{{ spark_log_dir }}}
+export SPARK_PID_DIR=${SPARK_PID_DIR:-{{ spark_run_dir }}}
 
 {% for key, value in spark_env_extras.items() %}
 export {{ key }}="{{ value }}"
 {% endfor %}
-
-### Comment above 2 lines and uncomment the following if
-### you want to run with scala version, that is included with the package
-#export SCALA_HOME=${SCALA_HOME:-/usr/lib/spark/scala}
-#export PATH=$PATH:$SCALA_HOME/bin
