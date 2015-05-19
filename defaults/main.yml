@@ -1,5 +1,10 @@
 ---
-spark_version: "1.3.0+cdh5.4.*"
-spark_cloudera_distribution: "cdh5.4"
+spark_version: "1.3.1-bin-hadoop2.6"
+spark_mirror: "http://d3kbcqa49mib13.cloudfront.net"
+spark_conf_dir: "/etc/spark"
+spark_usr_dir: "/usr/lib/spark"
+spark_lib_dir: "/var/lib/spark"
+spark_log_dir: "/var/log/spark"
+spark_run_dir: "/run/spark"
 
 spark_env_extras: {}
