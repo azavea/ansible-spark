@@ -1,3 +1,9 @@
+## 1.1.0
+
+- Add configurable Spark user and group.
+- Add support for a custom installation directory.
+- Add support for settng `spark-defaults.conf`.
+
 ## 1.0.0
 
 - Use Apache as the source for Spark vs. Cloudera. This change breaks backward
