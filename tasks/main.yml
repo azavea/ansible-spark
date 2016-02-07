@@ -10,7 +10,7 @@
         shell=/bin/false
         state=present
         groups="{{ spark_user_groups | join(',') }}"
-  when: user_exist.stdout == 0
+  when: user_exist is defined and user_exist.stdout == 0
 
 - name: Ensure Spark configuration directory exists
   file: path="{{ spark_conf_dir }}"
