@@ -3,7 +3,7 @@
   user: name={{ spark_user }}
         system=yes
         home={{ spark_lib_dir }}
-        shell=/bin/false
+        shell={{ spark_user_shell }}
         state=present
         groups="{{ spark_user_groups | join(',') }}"
 
