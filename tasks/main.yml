@@ -6,10 +6,12 @@
         shell={{ spark_user_shell }}
         state=present
         groups="{{ spark_user_groups | join(',') }}"
+  tags: ["spark-user"]
 
 - name: Ensure Spark configuration directory exists
   file: path="{{ spark_conf_dir }}"
         state=directory
+  tags: ["config"]
 
 - name: Ensure Spark log and run directories exist
   file: path="{{ item }}"
@@ -38,6 +40,7 @@
   with_items:
     - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}", dest: "{{ spark_usr_dir }}" }
     - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf", dest: "{{ spark_conf_dir }}/conf" }
+  tags: ["symlinks"]
 
 - name: Create shims for Spark binaries
   template: src=spark-shim.j2
@@ -48,11 +51,14 @@
     - spark-shell
     - spark-sql
     - spark-submit
+  tags: ["shims"]
 
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
-            dest="{{ spark_conf_dir }}/conf/spark-env.sh"
+            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-env.sh"
+  tags: ["config"]
 
 - name: Configure Spark defaults config file
   template: src=spark-defaults.conf.j2
-            dest="{{ spark_conf_dir }}/conf/spark-defaults.conf"
+            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
+  tags: ["config"]
