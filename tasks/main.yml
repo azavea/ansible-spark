@@ -1,4 +1,8 @@
 ---
+- name: Check if user exists
+  action: "shell /usr/bin/getent passwd $user | /usr/bin/wc -l | tr -d ' '"
+  register: user_exist
+
 - name: Create service account for Spark
   user: name={{ spark_user }}
         system=yes
@@ -6,6 +10,7 @@
         shell={{ spark_user_shell }}
         state=present
         groups="{{ spark_user_groups | join(',') }}"
+  when: user_exist is defined and user_exist.stdout == 0
 
 - name: Ensure Spark configuration directory exists
   file: path="{{ spark_conf_dir }}"
