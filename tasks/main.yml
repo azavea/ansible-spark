@@ -55,10 +55,10 @@
 
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
-            dest="{{ spark_conf_dir }}/conf/spark-env.sh"
+            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-env.sh"
   tags: ["config"]
 
 - name: Configure Spark defaults config file
   template: src=spark-defaults.conf.j2
-            dest="{{ spark_conf_dir }}/conf/spark-defaults.conf"
+            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
   tags: ["config"]
