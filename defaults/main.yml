@@ -16,3 +16,4 @@ spark_env_extras: {}
 spark_defaults_extras: {}
 
 spark_install_java: yes      # Required to check if you need to install Java dependency
+spark_install_path: no       # Required to check to see if the path should be added to the profile
