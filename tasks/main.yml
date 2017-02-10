@@ -63,7 +63,7 @@
             dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
   tags: ["config"]
   
-- name: Add path to profile (only if Centos or RedHat)
+- name: Add path to profile (only if CentOS or RHEL)
   template: src=etc/profile.d/spark.sh
             dest="/etc/profile.d/spark.sh"
             mode=0644
