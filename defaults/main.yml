@@ -21,3 +21,5 @@ spark_hive_site_properties: {}
 
 spark_env_extras: {}
 spark_defaults_extras: {}
+
+spark_install_java: True      # Required to check if you need to install Java dependency
