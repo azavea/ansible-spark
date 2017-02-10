@@ -15,4 +15,4 @@ spark_user_shell: "/bin/false"    # the spark user's default shell
 spark_env_extras: {}
 spark_defaults_extras: {}
 
-spark_install_java: True      # Required to check if you need to install Java dependency
+spark_install_java: yes      # Required to check if you need to install Java dependency
