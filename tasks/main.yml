@@ -23,6 +23,14 @@
     - "{{ spark_log_dir }}"
     - "{{ spark_run_dir }}"
 
+- name: Ensure Spark download and install directories exist
+  file: path="{{ item }}"
+        mode=0755
+        state=directory
+  with_items:
+    - "{{ spark_src_dir }}"
+    - "{{ spark_usr_parent_dir }}"
+
 - name: Download Spark distribution
   get_url: url="{{ spark_mirror }}/spark-{{ spark_version }}.tgz"
            dest="{{ spark_src_dir }}/spark-{{ spark_version }}.tgz"
