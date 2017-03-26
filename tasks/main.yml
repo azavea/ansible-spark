@@ -17,7 +17,7 @@
   file: path="{{ item }}"
         owner={{ spark_user }}
         group={{ spark_user }}
-        mode=0755
+        mode=0775
         state=directory
   with_items:
     - "{{ spark_log_dir }}"
