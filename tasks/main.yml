@@ -61,6 +61,17 @@
     - spark-submit
   tags: ["shims"]
 
+- name: Ensure Spark work and temp work directories exist
+  # Execute this task after setting up the symlinks to allow directories below them
+  file: path="{{ item }}"
+        owner={{ spark_user }}
+        group={{ spark_user }}
+        mode=0775
+        state=directory
+  with_items:
+    - "{{ spark_work_dir }}"
+    - "{{ spark_tmp_dir }}"
+
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
             dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-env.sh"
