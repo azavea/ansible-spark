@@ -17,11 +17,19 @@
   file: path="{{ item }}"
         owner={{ spark_user }}
         group={{ spark_user }}
-        mode=0755
+        mode=0775
         state=directory
   with_items:
     - "{{ spark_log_dir }}"
     - "{{ spark_run_dir }}"
+
+- name: Ensure Spark download and install directories exist
+  file: path="{{ item }}"
+        mode=0755
+        state=directory
+  with_items:
+    - "{{ spark_src_dir }}"
+    - "{{ spark_usr_parent_dir }}"
 
 - name: Download Spark distribution
   get_url: url="{{ spark_mirror }}/spark-{{ spark_version }}.tgz"
@@ -52,6 +60,17 @@
     - spark-sql
     - spark-submit
   tags: ["shims"]
+
+- name: Ensure Spark work and temp work directories exist
+  # Execute this task after setting up the symlinks to allow directories below them
+  file: path="{{ item }}"
+        owner={{ spark_user }}
+        group={{ spark_user }}
+        mode=0775
+        state=directory
+  with_items:
+    - "{{ spark_work_dir }}"
+    - "{{ spark_tmp_dir }}"
 
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
