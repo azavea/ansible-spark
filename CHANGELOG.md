@@ -1,3 +1,9 @@
+## 1.3.0
+
+- Add a variable to define the `spark` user's shell.
+- Add a variable to associate existing groups with `spark` user.
+- Add variables for customizable Spark work and temporary directories.
+
 ## 1.2.0
 
 - Add backward compatible support with Ansible 2.0.
