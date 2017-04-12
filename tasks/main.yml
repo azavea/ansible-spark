@@ -3,23 +3,33 @@
   user: name={{ spark_user }}
         system=yes
         home={{ spark_lib_dir }}
-        shell=/bin/false
+        shell={{ spark_user_shell }}
         state=present
         groups="{{ spark_user_groups | join(',') }}"
+  tags: ["spark-user"]
 
 - name: Ensure Spark configuration directory exists
   file: path="{{ spark_conf_dir }}"
         state=directory
+  tags: ["config"]
 
 - name: Ensure Spark log and run directories exist
   file: path="{{ item }}"
         owner={{ spark_user }}
         group={{ spark_user }}
-        mode=0755
+        mode=0775
         state=directory
   with_items:
     - "{{ spark_log_dir }}"
     - "{{ spark_run_dir }}"
+
+- name: Ensure Spark download and install directories exist
+  file: path="{{ item }}"
+        mode=0755
+        state=directory
+  with_items:
+    - "{{ spark_src_dir }}"
+    - "{{ spark_usr_parent_dir }}"
 
 - name: Download Spark distribution
   get_url: url="{{ spark_mirror }}/spark-{{ spark_version }}.tgz"
@@ -38,6 +48,7 @@
   with_items:
     - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}", dest: "{{ spark_usr_dir }}" }
     - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf", dest: "{{ spark_conf_dir }}/conf" }
+  tags: ["symlinks"]
 
 - name: Create shims for Spark binaries
   template: src=spark-shim.j2
@@ -48,11 +59,25 @@
     - spark-shell
     - spark-sql
     - spark-submit
+  tags: ["shims"]
+
+- name: Ensure Spark work and temp work directories exist
+  # Execute this task after setting up the symlinks to allow directories below them
+  file: path="{{ item }}"
+        owner={{ spark_user }}
+        group={{ spark_user }}
+        mode=0775
+        state=directory
+  with_items:
+    - "{{ spark_work_dir }}"
+    - "{{ spark_tmp_dir }}"
 
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
-            dest="{{ spark_conf_dir }}/conf/spark-env.sh"
+            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-env.sh"
+  tags: ["config"]
 
 - name: Configure Spark defaults config file
   template: src=spark-defaults.conf.j2
-            dest="{{ spark_conf_dir }}/conf/spark-defaults.conf"
+            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
+  tags: ["config"]
