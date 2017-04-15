@@ -81,3 +81,9 @@
   template: src=spark-defaults.conf.j2
             dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
   tags: ["config"]
+  
+- name: Add path to profile (only if CentOS or RHEL)
+  template: src=etc/profile.d/spark.sh
+            dest="/etc/profile.d/spark.sh"
+            mode=0644
+  when: spark_install_path and (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
