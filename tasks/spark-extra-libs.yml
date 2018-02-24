@@ -1,0 +1,8 @@
+- name: "deploy the set of {{ spark_extra_libs_fileset | length }} extra lib files"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ spark_extra_libs_dir }}"
+# TODO should probably be owner/group root
+    owner: "{{ spark_user }}"
+#    group: "{{ spark_user }}"
+  with_items: "{{ spark_extra_libs_fileset }}"
