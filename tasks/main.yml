@@ -81,3 +81,6 @@
   template: src=spark-defaults.conf.j2
             dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
   tags: ["config"]
+
+- include: spark-hive-site.yml
+  tags: ["config","spark-hive-site"]
