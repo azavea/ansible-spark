@@ -72,6 +72,16 @@
     - "{{ spark_work_dir }}"
     - "{{ spark_tmp_dir }}"
 
+- name: Ensure Spark local directories exist
+  file: path="{{ item }}"
+        owner={{ spark_user }}
+        group={{ spark_user }}
+        mode={{ spark_local_dir_mode }}
+        state=directory
+  when: item != "/tmp"
+  with_items: "{{spark_local_dirs}}"
+  tags: ["spark-local-dirs"]
+
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
             dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-env.sh"
