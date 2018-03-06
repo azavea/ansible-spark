@@ -21,3 +21,25 @@ spark_hive_site_properties: {}
 
 spark_env_extras: {}
 spark_defaults_extras: {}
+
+# Logger levels set to the official defaults
+# Ref: https://github.com/apache/spark/blob/master/conf/log4j.properties.template
+spark_log4j_loggers:
+  - name: log4j.logger.org.apache.spark.repl.Main
+    level: WARN
+  - name: log4j.logger.org.spark_project.jetty
+    level: WARN
+  - name: log4j.logger.org.spark_project.jetty.util.component.AbstractLifeCycle
+    level: ERROR
+  - name: log4j.logger.org.apache.spark.repl.SparkIMain$exprTyper
+    level: INFO
+  - name: log4j.logger.org.apache.spark.repl.SparkILoop$SparkILoopInterpreter
+    level: INFO
+  - name: log4j.logger.org.apache.parquet
+    level: ERROR
+  - name: log4j.logger.parquet
+    level: ERROR
+  - name: log4j.logger.org.apache.hadoop.hive.metastore.RetryingHMSHandler
+    level: FATAL
+  - name: log4j.logger.org.apache.hadoop.hive.ql.exec.FunctionRegistry
+    level: ERROR

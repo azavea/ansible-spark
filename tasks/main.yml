@@ -95,3 +95,8 @@
 
 - include: spark-hive-site.yml
   tags: ["config","spark-hive-site"]
+
+- include: spark-log4j.yml
+  vars:
+    log4j_template_file: "{{ spark_log4j_template_file | default('log4j.properties') }}"
+  tags: ["config","spark-log4j"]
