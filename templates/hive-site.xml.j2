@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+{% if spark_hive_site_properties is defined %}
+{% for name, value in spark_hive_site_properties.items()  %}
+  <property>
+    <name>{{name}}</name>
+    <value>{{value}}</value>
+  </property>
+{% endfor %}
+{% endif %}
+</configuration>

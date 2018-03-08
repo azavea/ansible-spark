@@ -1,0 +1,16 @@
+---
+- name: Deploy hive-site.xml in spark's conf directory
+  template:
+    src: "templates/hive-site.xml.j2"
+    dest: "{{spark_usr_parent_dir}}/spark-{{spark_version}}/conf/hive-site.xml"
+    force: yes
+  when:
+   - spark_hive_metastore_db_installed
+   - spark_hive_site_properties|length > 0
+
+- name: Ensure hive-site.xml removed from spark's conf directory
+  file:
+    path: "{{spark_usr_parent_dir}}/spark-{{spark_version}}/conf/hive-site.xml"
+    state: absent
+  when:
+   - not spark_hive_metastore_db_installed
