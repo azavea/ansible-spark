@@ -55,6 +55,9 @@ export HADOOP_CONF_DIR=${HADOOP_CONF_DIR:-/etc/hadoop/conf}
 
 export SPARK_LOG_DIR=${SPARK_LOG_DIR:-{{ spark_log_dir }}}
 export SPARK_PID_DIR=${SPARK_PID_DIR:-{{ spark_run_dir }}}
+{% if (spark_local_dirs | length) >0 %}
+export SPARK_LOCAL_DIRS="${SPARK_LOCAL_DIRS:-{{ spark_local_dirs|join(',') }}}"
+{% endif %}
 
 {% for key, value in spark_env_extras.items() | sort %}
 export {{ key }}="{{ value }}"

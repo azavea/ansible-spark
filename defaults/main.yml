@@ -6,6 +6,8 @@ spark_conf_dir: "/etc/spark"
 spark_usr_parent_dir: "/usr/lib"  #this is the folder where the spark archive will be extracted
 spark_usr_dir: "/usr/lib/spark"   #this is the symlink to the extracted/installed spark
 spark_work_dir: "/usr/lib/spark/work"
+spark_local_dirs: [] # optional list of spark-local dirs (can be used in SPARK_LOCAL_DIRS)
+spark_local_dir_mode: "1777"
 spark_tmp_dir: "/usr/lib/spark/tmp"
 spark_lib_dir: "/var/lib/spark"
 spark_log_dir: "/var/log/spark"
