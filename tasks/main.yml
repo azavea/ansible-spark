@@ -27,6 +27,7 @@
   file: path="{{ item }}"
         mode=0755
         state=directory
+        follow=true
   with_items:
     - "{{ spark_src_dir }}"
     - "{{ spark_usr_parent_dir }}"
