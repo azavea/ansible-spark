@@ -49,6 +49,7 @@
   with_items:
     - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}", dest: "{{ spark_usr_dir }}" }
     - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf", dest: "{{ spark_conf_dir }}/conf" }
+  when: spark_symlinks_enabled
   tags: ["symlinks"]
 
 - name: Create shims for Spark binaries
@@ -60,6 +61,7 @@
     - spark-shell
     - spark-sql
     - spark-submit
+  when: spark_shims_enabled
   tags: ["shims"]
 
 - name: Ensure Spark work and temp work directories exist
