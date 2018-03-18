@@ -1,3 +1,7 @@
 ---
 - name: azavea.java
   version: 0.6.1
+
+## More standard role to deploy Open JDK, tested on major distros: debian/ubuntu, centos/redhat
+- name: geerlingguy.java
+  version: 1.7.6

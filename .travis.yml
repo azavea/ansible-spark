@@ -1,0 +1,18 @@
+---
+sudo: required
+language: python
+services:
+  - docker
+
+# Limit docker version as workaround for: https://github.com/ansible/ansible/issues/35612
+install:
+  - pip install 'docker<3.0'
+  - pip install ansible==2.4.3
+  - pip install molecule
+
+script:
+  - molecule --version
+  - ansible --version
+  - molecule test
+notifications:
+webhooks: https://galaxy.ansible.com/api/v1/notifications/
