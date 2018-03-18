@@ -1,0 +1,3 @@
+---
+- name: azavea.java
+  version: 0.6.1
