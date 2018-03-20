@@ -18,6 +18,9 @@ spark_user: "spark"           # the name of the (OS)user created for spark
 spark_user_groups: []         # Optional list of (OS)groups the new spark user should belong to
 spark_user_shell: "/bin/false"    # the spark user's default shell
 
+spark_symlinks_enabled: yes
+spark_shims_enabled: yes
+
 spark_hive_metastore_db_installed: false
 spark_hive_site_properties: {}
 
