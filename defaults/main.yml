@@ -1,6 +1,8 @@
 ---
 spark_version: "1.3.1-bin-hadoop2.6"
 spark_mirror: "http://d3kbcqa49mib13.cloudfront.net"
+spark_install_java: yes      # Required to check if you need to install Java dependency
+
 spark_src_dir: "/usr/local/src"
 spark_conf_dir: "/etc/spark"
 spark_usr_parent_dir: "/usr/lib"  #this is the folder where the spark archive will be extracted
