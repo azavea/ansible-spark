@@ -14,6 +14,7 @@ An Ansible role for installing [Apache Spark](https://spark.apache.org).
   to add to `spark-defaults.conf` (e.g. `"spark.eventLog.enabled": true`)
 - `spark_user_groups` - an optional list of (OS)groups the spark user should belong to
 - `spark_user_shell` - the spark user's default shell (default: `/bin/false`)
+- `spark_log4j_loggers` - A list of dictionaries configuring the spark log4j loggers (default: logger config from spark/conf/log4j.properties.template)
 
 ## Example Playbook
 
