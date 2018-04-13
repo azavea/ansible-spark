@@ -88,12 +88,19 @@
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
             dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-env.sh"
-  tags: ["config"]
+  tags: ["config","spark-services"]
+  notify:
+    - Restart spark-mesos-shuffle-service
+    - Restart spark-history
 
 - name: Configure Spark defaults config file
   template: src=spark-defaults.conf.j2
             dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
   tags: ["config"]
+  tags: ["config","spark-services"]
+  notify:
+    - Restart spark-mesos-shuffle-service
+    - Restart spark-history
 
 - include: spark-hive-site.yml
   tags: ["config","spark-hive-site"]
@@ -102,3 +109,10 @@
   vars:
     log4j_template_file: "{{ spark_log4j_template_file | default('log4j.properties') }}"
   tags: ["config","spark-log4j"]
+
+- include: spark-extra-libs.yml
+  tags: ["spark-extra-libs","config"]
+
+- include: spark-services.yml
+  tags: ["spark-services"]
+  when: spark_services_install_enabled

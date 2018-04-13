@@ -1,0 +1,6 @@
+- name: "deploy the set of {{ spark_extra_libs_fileset | length }} extra lib files"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ spark_extra_libs_dir }}"
+    owner: "{{ spark_user }}"
+  with_items: "{{ spark_extra_libs_fileset }}"

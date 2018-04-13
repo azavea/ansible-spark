@@ -1,0 +1,43 @@
+---
+- debug:
+    msg: "ansible_service_mgr={{ ansible_service_mgr  }}"
+    verbosity: 1
+
+- name: Install {{ name }} SystemV initscript
+  template:
+    src: "spark_initscript.{{ ansible_os_family|lower }}.sh.j2"
+    dest: "/etc/init.d/{{ name }}"
+    mode: a+x
+  when: ansible_service_mgr != 'systemd'
+  notify:
+    - Restart {{ name }}
+
+- name: Deploy {{ name }} systemd unit file
+  template:
+    src: "spark_unitfile.service.j2"
+    dest: "/etc/systemd/system/{{ name }}.service"
+  register: unitfile
+  when: ansible_service_mgr == 'systemd'
+  notify:
+    - Restart {{ name }}
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  when:
+    - ansible_service_mgr == 'systemd'
+    - unitfile.changed
+
+- name: Ensure {{ name }} is enabled
+  service:
+    name: "{{ name }}"
+    state: started
+    enabled: yes
+
+- name: Optional {{ name }} force_restart
+  debug:
+    msg: "force_restart set ({{force_restart}}) -> calling restart handler"
+  changed_when: True
+  when: force_restart | default(false) | bool
+  notify:
+    - Restart {{ name }}

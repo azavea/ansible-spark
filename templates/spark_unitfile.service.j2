@@ -1,0 +1,23 @@
+[Unit]
+Description={{ desc }}
+After=network.target
+Wants=network.target
+
+[Service]
+Type=forking
+Environment=SPARK_PID_DIR={{ pid_dir }}
+Environment=SPARK_LOG_DIR={{ spark_log_dir }}
+#Environment=HADOOP_LIBEXEC_DIR={{spark_hadoop_home}}/libexec
+User={{user}}
+ExecStartPre=/bin/mkdir -p {{ pid_dir }}
+ExecStartPre=/bin/chown -R {{ user }} {{ pid_dir }}
+PIDFile={{ pid_dir }}/{{ pid_file }}
+ExecStart={{ daemon_dir }}/{{ start_cmd }}
+ExecStop={{ daemon_dir }}/{{ stop_cmd }}
+Restart=always
+RestartSec=20
+PermissionsStartOnly=true
+#LimitNOFILE=131072
+
+[Install]
+WantedBy=multi-user.target
