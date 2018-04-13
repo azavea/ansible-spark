@@ -1,15 +1,13 @@
 ---
 - debug:
+    msg: "ansible_service_mgr={{ ansible_service_mgr  }}"
     verbosity: 1
-    msg:
-    - "ansible_service_mgr={{ ansible_service_mgr  }}"
 
 - name: Install {{ name }} SystemV initscript
   template:
     src: "spark_initscript.{{ ansible_os_family|lower }}.sh.j2"
     dest: "/etc/init.d/{{ name }}"
     mode: a+x
-  register: initscript
   when: ansible_service_mgr != 'systemd'
   notify:
     - Restart {{ name }}
@@ -30,7 +28,6 @@
     - ansible_service_mgr == 'systemd'
     - unitfile.changed
 
-# Note: It's better practice to enable the service outside the handler, when called from other places
 - name: Ensure {{ name }} is enabled
   service:
     name: "{{ name }}"

@@ -4,9 +4,9 @@
 - debug:
     verbosity: 1
     msg:
-    - "ansible_service_mgr={{ ansible_service_mgr  }}"
-    - "spark_history_service_enabled={{ spark_history_service_enabled  }}"
-    - "spark_mesos_shuffle_service_enabled={{ spark_mesos_shuffle_service_enabled  }}"
+      - "ansible_service_mgr={{ ansible_service_mgr  }}"
+      - "spark_history_service_enabled={{ spark_history_service_enabled  }}"
+      - "spark_mesos_shuffle_service_enabled={{ spark_mesos_shuffle_service_enabled  }}"
 
 - include: service-install.yml
   vars:
