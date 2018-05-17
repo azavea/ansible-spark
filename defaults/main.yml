@@ -66,3 +66,6 @@ spark_log4j_loggers:
     level: FATAL
   - name: log4j.logger.org.apache.hadoop.hive.ql.exec.FunctionRegistry
     level: ERROR
+
+# Hadoop
+spark_hdfs_native_lib_path: "/usr/lib/hadoop/lib/native"
