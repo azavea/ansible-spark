@@ -15,6 +15,7 @@ An Ansible role for installing [Apache Spark](https://spark.apache.org).
 - `spark_user_groups` - an optional list of (OS)groups the spark user should belong to
 - `spark_user_shell` - the spark user's default shell (default: `/bin/false`)
 - `spark_log4j_loggers` - A list of dictionaries configuring the spark log4j loggers (default: logger config from spark/conf/log4j.properties.template)
+- `spark_hdfs_native_lib_path` - Path for the HDFS library folder (default: `/usr/lib/hadoop/lib/native`)
 
 ## Example Playbook
 
