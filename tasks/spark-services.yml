@@ -1,0 +1,33 @@
+- set_fact:
+    spark_home: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}"
+
+- debug:
+    verbosity: 1
+    msg:
+      - "ansible_service_mgr={{ ansible_service_mgr  }}"
+      - "spark_history_service_enabled={{ spark_history_service_enabled  }}"
+      - "spark_mesos_shuffle_service_enabled={{ spark_mesos_shuffle_service_enabled  }}"
+
+- include: service-install.yml
+  vars:
+    desc: Spark history service
+    name: spark-history
+    user: "{{ spark_history_service_user }}"
+    pid_dir: "{{ spark_run_dir }}"
+    pid_file: "spark-{{ spark_history_service_user }}-org.apache.spark.deploy.history.HistoryServer-1.pid"
+    start_cmd: "start-history-server.sh"
+    stop_cmd: "stop-history-server.sh"
+    daemon_dir: "{{ spark_home }}/sbin"
+  when: spark_history_service_enabled
+
+- include: service-install.yml
+  vars:
+    desc: Spark Mesos Shuffle service
+    name: spark-mesos-shuffle-service
+    user: "{{ spark_mesos_shuffle_service_user }}"
+    pid_dir: "{{ spark_run_dir }}"
+    pid_file: "spark-{{ spark_mesos_shuffle_service_user }}-org.apache.spark.deploy.mesos.MesosExternalShuffleService-1.pid"
+    start_cmd: "start-mesos-shuffle-service.sh"
+    stop_cmd: "stop-mesos-shuffle-service.sh"
+    daemon_dir: "{{ spark_home }}/sbin"
+  when: spark_mesos_shuffle_service_enabled

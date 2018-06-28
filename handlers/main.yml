@@ -1,0 +1,16 @@
+---
+- name: Restart spark-history
+  service:
+    name: spark-history
+    state: restarted
+  when:
+   - spark_history_service_enabled
+   - spark_services_install_enabled
+
+- name: Restart spark-mesos-shuffle-service
+  service:
+    name: spark-mesos-shuffle-service
+    state: restarted
+  when:
+   - spark_mesos_shuffle_service_enabled
+   - spark_services_install_enabled

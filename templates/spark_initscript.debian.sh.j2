@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+#
+# SystemV start daemon script for the {{ desc }}
+
+. /lib/lsb/init-functions
+
+# Env variables
+NAME="{{ name }}"
+DAEMON_START_CMD="{{ daemon_dir }}/{{ start_cmd }}"
+DAEMON_STOP_CMD="{{ daemon_dir }}/{{ stop_cmd }}"
+RUN_USER={{ user }}
+PIDFILE="{{ pid_dir }}/{{ pid_file }}"
+
+export SPARK_PID_DIR="{{ pid_dir }}"
+export SPARK_IDENT_STRING=$RUN_USER
+
+# Ensure that the PID_DIR exists (dirs in /var/run are cleaned at OS startup time)
+if [ ! -e "$SPARK_PID_DIR" ]; then
+  mkdir -p "$SPARK_PID_DIR" && chown ${RUN_USER} "$SPARK_PID_DIR"
+fi
+
+find_spark_process() {
+  local pid
+
+  if [[ -f "${PIDFILE}" ]]; then
+    pid="`cat ${PIDFILE}`"
+    if [[ -z "`ps axf | grep ${pid} | grep -v grep`" ]]; then
+      log_failure_msg "$NAME running but process is dead"
+    else
+      log_success_msg "$NAME is running (pid=$pid)"
+    fi
+  else
+    log_warning_msg "$NAME is not running"
+  fi
+}
+
+start() {
+  local pid
+
+  if [[ -f "${PIDFILE}" ]]; then
+    log_failure_msg "$NAME is running"
+    exit 1
+  else
+{% if  ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'%}
+    log_daemon_msg "Starting $NAME..."
+    #sudo -u ${RUN_USER} "${DAEMON_STOP_CMD}"
+    start-stop-daemon --start -q -p "$PIDFILE" -c ${RUN_USER} --exec ${DAEMON_START_CMD}
+{% else %}
+    source /etc/init.d/functions
+    daemon --user ${RUN_USER}  ${DAEMON_START_CMD}
+{% endif %}
+    RETVAL=$?
+
+    if [[ -f "${PIDFILE}" ]]; then
+      pid="`cat ${PIDFILE}`"
+      log_success_msg "$NAME started with pid=$pid (rc=$RETVAL)"
+    else
+      log_failure_msg "$NAME start failed (rc=$RETVAL)"
+    fi
+
+  fi
+
+}
+
+stop() {
+  local pid
+
+  if [[ ! -f "${PIDFILE}" ]]; then
+    log_failure_msg "$NAME is not running"
+    exit 1
+  fi
+  pid="`cat ${PIDFILE}`"
+  if [[ -z "${pid}" ]]; then
+    log_failure_msg "$NAME is not running"
+  else
+{% if  ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'%}
+    log_daemon_msg "Stopping $NAME (pid=$pid)..."
+    #Alternative just sudo should be enough
+    #sudo -u ${RUN_USER} "${DAEMON_STOP_CMD}"
+    start-stop-daemon --stop --retry 3 --pidfile "$PIDFILE"
+{% else %}
+    runuser -c "${DAEMON_STOP_CMD}" -m -l ${RUN_USER}
+{% endif %}
+
+    while [ -x /proc/${pid} ]; do
+       echo "Waiting for $NAME to shutdown ..."
+       sleep 3
+    done
+    # assure PIDFILE is removed
+    rm -f ${PIDFILE}
+    log_success_msg "$NAME stopped"
+  fi
+}
+
+case "${1}" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+	stop
+	start
+	;;
+  status)
+    # Note: daemon only exists on redhat family distros
+    #daemon --running --name={{name}} --verbose
+    find_spark_process
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|status}"
+esac
+
+exit 0
