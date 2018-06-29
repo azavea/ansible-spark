@@ -20,6 +20,7 @@ spark_lib_dir: "/var/lib/spark"
 spark_log_dir: "/var/log/spark"
 spark_run_dir: "/run/spark"
 spark_user: "spark"           # the name of the (OS)user created for spark
+spark_user_group: "{{ spark_user }}" # Name of the Spark user's primary group
 spark_user_groups: []         # Optional list of (OS)groups the new spark user should belong to
 spark_user_shell: "/bin/false"    # the spark user's default shell
 

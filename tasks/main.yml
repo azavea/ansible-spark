@@ -1,10 +1,17 @@
 ---
+- name: Create primary group for the Spark service account
+  group: name={{ spark_user_group }}
+         state=present
+         system=True
+  tags: ["spark-user"]
+
 - name: Create service account for Spark
   user: name={{ spark_user }}
         system=yes
         home={{ spark_lib_dir }}
         shell={{ spark_user_shell }}
         state=present
+        group={{ spark_user_group }}
         groups="{{ spark_user_groups | join(',') }}"
   tags: ["spark-user"]
 
@@ -16,7 +23,7 @@
 - name: Ensure Spark log and run directories exist
   file: path="{{ item }}"
         owner={{ spark_user }}
-        group={{ spark_user }}
+        group={{ spark_user_group }}
         mode=0775
         state=directory
   with_items:
@@ -41,6 +48,8 @@
              dest="{{ spark_usr_parent_dir }}"
              copy=no
              creates="{{ spark_usr_parent_dir }}/{{ spark_pkg_filename }}"
+             owner="{{ spark_user }}"
+             group="{{ spark_user_group }}"
 
 - name: Setup Spark distribution symlinks
   file: src="{{ item.src }}"
@@ -68,7 +77,7 @@
   # Execute this task after setting up the symlinks to allow directories below them
   file: path="{{ item }}"
         owner={{ spark_user }}
-        group={{ spark_user }}
+        group={{ spark_user_group }}
         mode=0775
         state=directory
   with_items:
@@ -78,7 +87,7 @@
 - name: Ensure Spark local directories exist
   file: path="{{ item }}"
         owner={{ spark_user }}
-        group={{ spark_user }}
+        group={{ spark_user_group }}
         mode={{ spark_local_dir_mode }}
         state=directory
   when: item != "/tmp"
