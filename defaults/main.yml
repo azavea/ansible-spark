@@ -1,6 +1,11 @@
 ---
-spark_version: "1.3.1-bin-hadoop2.6"
-spark_mirror: "http://d3kbcqa49mib13.cloudfront.net"
+spark_version: "2.3.1"
+spark_pkg_filename_prefix: "spark-{{ spark_version }}"
+spark_pkg_filename: "{{ spark_pkg_filename_prefix }}-bin-hadoop{{ spark_hadoop_version }}"
+
+spark_mirror_dist_dir: "{{ spark_pkg_filename_prefix }}"
+spark_mirror: "http://mirror.switch.ch/mirror/apache/dist/spark"
+
 spark_install_java: yes      # Required to check if you need to install Java dependency
 
 spark_src_dir: "/usr/local/src"
@@ -51,3 +56,4 @@ spark_log4j_loggers:
 
 # Hadoop
 spark_hdfs_native_lib_path: "/usr/lib/hadoop/lib/native"
+spark_hadoop_version: "2.7"

@@ -33,22 +33,22 @@
     - "{{ spark_usr_parent_dir }}"
 
 - name: Download Spark distribution
-  get_url: url="{{ spark_mirror }}/spark-{{ spark_version }}.tgz"
-           dest="{{ spark_src_dir }}/spark-{{ spark_version }}.tgz"
+  get_url: url="{{ spark_mirror }}/{{ spark_mirror_dist_dir }}/{{ spark_pkg_filename }}.tgz"
+           dest="{{ spark_src_dir }}/{{ spark_pkg_filename }}.tgz"
 
 - name: Extract Spark distribution
-  unarchive: src="{{ spark_src_dir }}/spark-{{ spark_version }}.tgz"
+  unarchive: src="{{ spark_src_dir }}/{{ spark_pkg_filename }}.tgz"
              dest="{{ spark_usr_parent_dir }}"
              copy=no
-             creates="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}"
+             creates="{{ spark_usr_parent_dir }}/{{ spark_pkg_filename }}"
 
 - name: Setup Spark distribution symlinks
   file: src="{{ item.src }}"
         dest="{{ item.dest }}"
         state=link
   with_items:
-    - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}", dest: "{{ spark_usr_dir }}" }
-    - { src: "{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf", dest: "{{ spark_conf_dir }}/conf" }
+    - { src: "{{ spark_usr_parent_dir }}/{{ spark_pkg_filename }}", dest: "{{ spark_usr_dir }}" }
+    - { src: "{{ spark_usr_parent_dir }}/{{ spark_pkg_filename }}/conf", dest: "{{ spark_conf_dir }}/conf" }
   when: spark_symlinks_enabled
   tags: ["symlinks"]
 
@@ -87,12 +87,12 @@
 
 - name: Configure Spark environment
   template: src=spark-env.sh.j2
-            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-env.sh"
+            dest="{{ spark_usr_parent_dir }}/{{ spark_pkg_filename }}/conf/spark-env.sh"
   tags: ["config"]
 
 - name: Configure Spark defaults config file
   template: src=spark-defaults.conf.j2
-            dest="{{ spark_usr_parent_dir }}/spark-{{ spark_version }}/conf/spark-defaults.conf"
+            dest="{{ spark_usr_parent_dir }}/{{ spark_pkg_filename }}/conf/spark-defaults.conf"
   tags: ["config"]
 
 - include: spark-hive-site.yml
